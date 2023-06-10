@@ -34,47 +34,60 @@ $(document).ready(function () {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
 
-    $.get(
-      `https://diwserver.vps.webdock.cloud/products/${productId}`,
-      function (product) {
-        $('#product-title').text(product.title);
-        $('#product-description').html(product.description);
-        $('#product-price').text('Price: R$' + product.price.toFixed(2));
-        $('#product-rating').text(
-          'Rating: ' +
-            product.rating.rate.toFixed(1) +
-            ' (' +
-            product.rating.count +
-            ' ratings)'
-        );
-        $('#product-image').attr('src', product.image);
-      }
-    );
+    if (productId) {
+      $.get(
+        `https://diwserver.vps.webdock.cloud/products/${productId}`,
+        function (product) {
+          $('#product-title').text(product.title);
+          $('#product-description').html(product.description);
+          $('#product-price').text('Price: R$' + product.price.toFixed(2));
+          $('#product-rating').text(
+            'Rating: ' +
+              product.rating.rate.toFixed(1) +
+              ' (' +
+              product.rating.count +
+              ' ratings)'
+          );
+          $('#product-image').attr('src', product.image);
+        }
+      );
+    }
   });
-});
 
-$(document).ready(function () {
-  // Handle form submission
-  $('form').submit(function (event) {
-    event.preventDefault();
+  $('#buttonName').click(function () {
+    let selectedCategory = $('#searchInput').val();
 
-    const query = $('#search').val().toLowerCase();
-    console.log(query)
-    const url = `pesquisa.html?search=${query}`;
+    console.log("aaaaaaaaa")
+    if (selectedCategory) {
+      const url = `pesquisa.html?name=${selectedCategory}`;
 
-    window.open(url, '_blank');
+      window.open(url, '_blank');
+    }
   });
-});
 
-$(document).ready(function () {
+  $('#buttonCategory').click(function () {
+    let selectedCategory = $('#category').val();
+
+    if (selectedCategory) {
+      const url = `pesquisa.html?category=${selectedCategory}`;
+
+      window.open(url, '_blank');
+    }
+  });
+
   const urlParams = new URLSearchParams(window.location.search);
-  const searchQuery = urlParams.get('search');
+  const searchQuery = urlParams.get('category');
+  const nameQuery = urlParams.get('name');
+  let endpoint;
 
-  $.get('https://diwserver.vps.webdock.cloud/products/search?query='+searchQuery, function (data) {
-    const searchResults = data.products.filter((product) =>
-      product.title.toLowerCase().includes(searchQuery)
-    );
+  if (searchQuery) {
+    endpoint = `https://diwserver.vps.webdock.cloud/products/category/${searchQuery}`;
+  } else {
+    endpoint = `https://diwserver.vps.webdock.cloud/products/search?query=${nameQuery}`;
+  }
 
+  $.get(endpoint, function (data) {
+    const { products: searchResults } = data;
     const cardsContainer = $('#cards');
 
     if (searchResults.length === 0) {
@@ -82,13 +95,9 @@ $(document).ready(function () {
     } else {
       const cardsHTML = searchResults.map(
         (product) => `
-        <div class=" col-8 col-md-6 col-sm-6 mb-3 col-lg-3">
+        <div class="col-8 col-md-6 col-sm-6 mb-3 col-lg-3">
           <div class="product-card-search card">
-            <img src="${
-              product.image
-            }" class="card-img-top product-card-search-image" alt="${
-          product.title
-        }" />
+            <img src="${product.image}" class="card-img-top product-card-search-image" alt="${product.title}" />
             <div class="card-body">
               <a href="detalhes.html?id=${product.id}">
                 <h6 class="card-title">${product.title}</h6>
@@ -109,9 +118,7 @@ $(document).ready(function () {
   }).fail(function (error) {
     console.error('Error:', error);
   });
-});
 
-$(document).ready(function () {
   var categorySelect = $('#category');
 
   $.ajax({
@@ -128,9 +135,7 @@ $(document).ready(function () {
       });
     },
   });
-});
 
-$(document).ready(function () {
   var listGroup = $('.list-group');
   var button = $('#button');
 

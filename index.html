@@ -87,7 +87,7 @@
       <div class="container mt-3">
         <div class="row">
           <div class="col-md-3">
-            <form class="mt-3">
+            <div class="mt-3">
               <div class="search-inputs col">
                 <div class="col">
                   <label for="category" class="form-label">Categoria</label>
@@ -95,35 +95,28 @@
                     <option selected>Escolha uma categoria...</option>
                   </select>
                 </div>
-                <div class="col">
-                  <label for="category" class="form-labe mt-3"
-                    >Departamento</label
-                  >
-                  <select id="category" class="form-select">
-                    <option>Escolha um departamento...</option>
-                    <option>Brincos</option>
-                    <option>Pulseiras</option>
-                    <option>Aneis</option>
-                  </select>
-                </div>
+               
                 <div class="col">
                   <label for="search" class="form-label mt-3">Nome</label>
                   <div class="input-group">
                     <input
                       type="text"
-                      id="search"
+                      id="searchInput"
                       class="form-control"
                       placeholder="Nome do produto *"
                       aria-label="Nome do produto"
                     />
                   </div>
-                  <p>* Obrigatorio</p>
-                  <button class="btn btn-primary mt-3" type="submit">
-                    Pesquisar
+                  <button class="btn btn-primary mt-3" id="buttonCategory" type="submit">
+                    Pesquisar por categoria
+                  </button>
+
+                  <button class="btn btn-primary mt-3" id="buttonName" type="submit">
+                    Pesquisar por nome
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
           <section class="col-md-9">
             <div
